@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PathFinding
-{
-
     public class Car : MonoBehaviour
     {
-        public Tracker tracker;
+        public PathFinding.Tracker tracker;
         const float maxSpeed = 50.0f;
         const float accelerateSpeed = 0.3f;
         const float turnSpeed = 100.0f;
@@ -16,7 +13,7 @@ namespace PathFinding
         public bool mLap;
         public int[] layer;                                              // = { 4, 3, 3, 4 };
 
-        CarController carController;
+        PathFinding.CarController carController;
         public NeuralNetwork network;
         public float currentSpeed = 10.0f;
         public float lastSpeed = 10.0f;
@@ -34,7 +31,7 @@ namespace PathFinding
             network = new NeuralNetwork(layer, rand);
             //highest = -1;
             currentSpeed = 10.0f;
-            carController = new CarController();
+            carController = new PathFinding.CarController();
             Fitness = 0;
             isAlive = true;
 
@@ -49,13 +46,13 @@ namespace PathFinding
             {
                 if (child.gameObject.tag == "tracker")
                 {
-                    tracker = GetComponent<Tracker>();
+                    tracker = GetComponent<PathFinding.Tracker>();
                 }
             }
             
             //highest = -1;
             currentSpeed = 25.0f;
-            carController = new CarController();
+            carController = new PathFinding.CarController();
             Fitness = 0;
             isAlive = true;
         }
@@ -78,8 +75,8 @@ namespace PathFinding
 
                 //return;
                 //Get Values From the Tracker
-                float[] input = { tracker.GetDistance(Direction.Left)
-                        , tracker.GetDistance(Direction.Right), tracker.GetDistance(Direction.Forward), currentSpeed}; //left, right, front, speed
+                float[] input = { tracker.GetDistance(PathFinding.Direction.Left)
+                        , tracker.GetDistance(PathFinding.Direction.Right), tracker.GetDistance(PathFinding.Direction.Forward), currentSpeed}; //left, right, front, speed
                 float[] output = network.FeedForward(input);
 
                 /* output meaning
@@ -89,40 +86,40 @@ namespace PathFinding
                 output[3] Deseleration
                  */
 
-                Action turn = Action.Default;
-                Action speed = Action.Default;
+                PathFinding.Action turn = PathFinding.Action.Default;
+                PathFinding.Action speed = PathFinding.Action.Default;
 
                 if (output[0] > output[1])
                 {
-                    turn = Action.TurnRight;
+                    turn = PathFinding.Action.TurnRight;
                 }
                 else
                 {
-                    turn = Action.TurnLeft;
+                    turn = PathFinding.Action.TurnLeft;
                 }
                 if (output[2] > output[3])
                 {
-                    speed = Action.Accelerate;
+                    speed = PathFinding.Action.Accelerate;
                 }
                 else
                 {
-                    speed = Action.decelerate;
+                    speed = PathFinding.Action.decelerate;
                 }
 
                 //Inputs by AI
-                if (turn == Action.TurnLeft)
+                if (turn == PathFinding.Action.TurnLeft)
                 {
                     transform.Rotate(Vector3.down, turnSpeed * Time.deltaTime);
                 }
-                else if (turn == Action.TurnRight)
+                else if (turn == PathFinding.Action.TurnRight)
                 {
                     transform.Rotate(Vector3.up, turnSpeed * Time.deltaTime);
                 }
-                if (speed == Action.Accelerate && currentSpeed < maxSpeed)
+                if (speed == PathFinding.Action.Accelerate && currentSpeed < maxSpeed)
                 {
                     currentSpeed += accelerateSpeed;
                 }
-                else if (speed == Action.decelerate && currentSpeed > 25.0f)
+                else if (speed == PathFinding.Action.decelerate && currentSpeed > 25.0f)
                 {
                     currentSpeed -= accelerateSpeed;
                 }
@@ -197,4 +194,3 @@ namespace PathFinding
             }
         }
     }
-}
