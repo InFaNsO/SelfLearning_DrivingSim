@@ -38,7 +38,7 @@ public class DeepNeuralNetwork : MonoBehaviour
             mLayers[i].InitializeWeights();
         }
     }
-
+    
     public List<float> FeedForward(ref List<float> inputs)
     {
         mLayers[0].FeedForward(ref inputs);
@@ -49,6 +49,21 @@ public class DeepNeuralNetwork : MonoBehaviour
         }
 
         return mLayers[mLayers.Count - 1].mOutputs;
+    }
+
+    public void BackPropogation(ref List<float> expectedOutput)
+    {
+        mLayers[mLayers.Count - 1].BackPropOutput(ref expectedOutput);
+
+        for(int i = mLayers.Count - 2; i >= 0; --i)
+        {
+            mLayers[i].BackPropHidden(ref mLayers[i + 1].mGamma, ref mLayers[i + 1].mWeights);
+        }
+
+        for(int i = 0; i < mLayers.Count; ++i)
+        {
+            mLayers[i].UpdateWeights();
+        }
     }
 
 }

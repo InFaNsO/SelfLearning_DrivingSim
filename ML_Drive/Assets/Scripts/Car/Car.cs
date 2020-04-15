@@ -14,7 +14,7 @@ using UnityEngine;
         public int[] layer;                                              // = { 4, 3, 3, 4 };
 
         PathFinding.CarController carController;
-        public NeuralNetwork network;
+        public DeepNeuralNetwork network;
         public float currentSpeed = 10.0f;
         public float lastSpeed = 10.0f;
         const float minValue = 0.89f;                                   // minimum value that the output should have in order to be accepted
@@ -28,7 +28,7 @@ using UnityEngine;
         public void Initialize(int[] layer, System.Random rand)
         {
             this.layer = layer;
-            network = new NeuralNetwork(layer, rand);
+            network = new DeepNeuralNetwork();
             //highest = -1;
             currentSpeed = 10.0f;
             carController = new PathFinding.CarController();
@@ -66,18 +66,21 @@ using UnityEngine;
                 {
                     mTimer += Time.deltaTime;
                 }
-                //Action action;
-                //action = carController.Update();
+            //Action action;
+            //action = carController.Update();
 
-                //if (tracker.GetDistance(Direction.Left) <=0.0f) {
-                //    return;
-                //}
+            //if (tracker.GetDistance(Direction.Left) <=0.0f) {
+            //    return;
+            //}
 
-                //return;
-                //Get Values From the Tracker
-                float[] input = { tracker.GetDistance(PathFinding.Direction.Left)
-                        , tracker.GetDistance(PathFinding.Direction.Right), tracker.GetDistance(PathFinding.Direction.Forward), currentSpeed}; //left, right, front, speed
-                float[] output = network.FeedForward(input);
+            //return;
+            //Get Values From the Tracker
+            List<float> input = new List<float>();
+            input.Add(tracker.GetDistance(PathFinding.Direction.Left));
+            input.Add(tracker.GetDistance(PathFinding.Direction.Right));
+            input.Add(tracker.GetDistance(PathFinding.Direction.Forward));
+            input.Add(currentSpeed); //left, right, front, speed
+                var output = network.FeedForward(ref input);
 
                 /* output meaning
                 output[0] turn right

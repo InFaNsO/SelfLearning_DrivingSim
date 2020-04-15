@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class DNA : MonoBehaviour
 {
-    public DeepNeuralNetwork myDeepNeuralNetwork;
+    public DeepNeuralNetwork myDeepNeuralNetwork = null;
     public float mFitness { get; private set; }
+
+    public bool IsAlive = false;
+    
     [SerializeField] float mMutationRate = 0.4f;
 
     // Start is called before the first frame update

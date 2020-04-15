@@ -6,18 +6,18 @@ using System;
 public class NeuralLayer : MonoBehaviour
 {
 
-    [SerializeField] public int mOutputCount = 0;              //# of neurons in the current layer
-    private int mInputCount = 0;               //# of neurons in the previous layer
+    [SerializeField] public int mOutputCount = 0;       //# of neurons in the current layer
+    private int mInputCount = 0;                        //# of neurons in the previous layer
     
     [SerializeField] float mLearningRate = 0.0033f;     //At this rate the weights will be updted
 
-    public List<float> mOutputs;
-    public List<float> mInputs;
+    public List<float> mOutputs = new List<float>();
+    public List<float> mInputs = new List<float>();
 
-    public List<List<float>> mWeights { get; private set; }
+    public List<List<float>> mWeights;
     public List<List<float>> mWeightsDelta;
-    public List<float> mGamma;
-    public List<float> mError;
+    public List<float> mGamma = new List<float>();
+    public List<float> mError = new List<float>();
 
     public void SetInputCount(int count) { mInputCount = count; }
     public int GetInputCount() { return mInputCount; }
@@ -27,10 +27,6 @@ public class NeuralLayer : MonoBehaviour
         mOutputs.Capacity = mOutputCount;
         mInputs.Capacity = mInputCount;
 
-        mWeights.Capacity = mOutputCount;
-        for (int i = 0; i < mOutputCount; ++i)
-            mWeights[i].Capacity = mInputCount;
-
         mGamma.Capacity = mOutputCount;
         mError.Capacity = mOutputCount;
 
@@ -39,8 +35,20 @@ public class NeuralLayer : MonoBehaviour
 
     public void InitializeWeights()
     {
+        mWeights = new List<List<float>>();
+        mWeights.Capacity = mOutputCount;
+
+        mWeightsDelta = new List<List<float>>();
+        mWeightsDelta.Capacity = mOutputCount;
+
         for (int i = 0; i < mOutputCount; ++i)
         {
+            mWeights[i] = new List<float>();
+            mWeights[i].Capacity = mInputCount;
+
+            mWeightsDelta[i] = new List<float>();
+            mWeightsDelta[i].Capacity = mInputCount;
+
             for (int j = 0; j < mInputCount; ++j)
             {
                 float rand = UnityEngine.Random.Range(0.0f, 1.0f);
@@ -104,14 +112,14 @@ public class NeuralLayer : MonoBehaviour
         }
     }
 
-    public void BackPropHidden(float[] gammaForward, float[,] weightsForward)
+    public void BackPropHidden(ref List<float> gammaForward, ref List<List<float>> weightsForward)
     {
         for (int i = 0; i < mOutputCount; ++i)
         {
             mGamma[i] = 0;
-            for (int j = 0; j < gammaForward.Length; ++j)
+            for (int j = 0; j < gammaForward.Count; ++j)
             {
-                mGamma[i] += gammaForward[j] * weightsForward[j, i];                 //finds the gamma value for a hidden layer
+                mGamma[i] += gammaForward[j] * weightsForward[j][i];                 //finds the gamma value for a hidden layer
             }
             mGamma[i] *= TanHDer(mOutputs[i]);
         }
