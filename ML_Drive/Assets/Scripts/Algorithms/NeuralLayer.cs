@@ -22,16 +22,26 @@ public class NeuralLayer : MonoBehaviour
     public void SetInputCount(int count) { mInputCount = count; }
     public void SetOutputCount(int count) { mOutputCount = count; }
     public int GetInputCount() { return mInputCount; }
+    private void Start()
+    {
+        Initialize();
+    }
+
 
     public void Initialize()
     {
+        mOutputs.Clear();
+        mGamma.Clear();
+        mError.Clear();
+
         for(int i = 0; i < mOutputCount; ++i)
         {
             mOutputs.Add(0);
             mGamma.Add(0);
             mError.Add(0);
         }
-    
+
+        mInputs.Clear();
         for(int i = 0; i < mInputCount; ++i)
             mInputs.Add(0);
 

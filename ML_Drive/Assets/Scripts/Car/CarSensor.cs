@@ -12,24 +12,26 @@ public class CarSensor : MonoBehaviour
     private RaycastHit hitLeft;
     private RaycastHit hitRight;
 
-    public LayerMask layermask;
-
+    //[SerializeField] LayerMask layermask;
+    [SerializeField]LayerMask layermask = 0;
     public void Start()
     {
-        layermask = LayerMask.GetMask("Wall");
+        //layermask = 1 << 10;
+        layermask = ~layermask;
     }
 
     public void Update()
     {
         bool hit = true;
+
         //front
-        hit = Physics.Raycast(transform.position, transform.forward, out hitFront, layermask);
+        hit = Physics.Raycast(transform.position, transform.forward, out hitFront);
         distanceFront = hitFront.distance;
         //Left
-        hit = Physics.Raycast(transform.position, -transform.right, out hitLeft, layermask);
+        hit = Physics.Raycast(transform.position, -transform.right, out hitLeft);
         distanceLeft = hitLeft.distance;
         //Left
-        hit = Physics.Raycast(transform.position, transform.right, out hitRight, layermask);
+        hit = Physics.Raycast(transform.position, transform.right, out hitRight);
         distanceRight = hitRight.distance;
     }
 

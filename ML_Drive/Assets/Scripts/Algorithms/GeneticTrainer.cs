@@ -21,6 +21,7 @@ public class GeneticTrainer : MonoBehaviour
     int mBest = -1;
     int mSecondBest = -1;
 
+    public bool IncrementGenerationTrig = false;
 
     void Start()
     {
@@ -29,6 +30,7 @@ public class GeneticTrainer : MonoBehaviour
         {
             myPopulation.Add(Instantiate(GeneType, SpawnPoint.position, SpawnPoint.rotation));
             mPopulation.Add(myPopulation[i].GetComponent<DNA>());
+            myPopulation[i].SetActive(true);
         }
 
         mBest = 0;
@@ -38,6 +40,12 @@ public class GeneticTrainer : MonoBehaviour
 
     void Update()
     {
+        if(IncrementGenerationTrig)
+        {
+            IncrementGeneration();
+            IncrementGenerationTrig = false;
+        }
+
         for(int i = 0; i < mPopulation.Count; ++i)
         {
             if(mPopulation[i].mFitness > mPopulation[mBest].mFitness)
@@ -59,38 +67,36 @@ public class GeneticTrainer : MonoBehaviour
 
     void IncrementGeneration()
     {
-        List<DNA> nextGen = new List<DNA>();
+        List<DeepNeuralNetwork> nextGen = new List<DeepNeuralNetwork>();
 
         for (int i = 0; i < mPopulation.Count; ++i)
         {
-            DNA parent1 = null;
-            DNA parent2 = null;
-            DNA child = null;
+            DeepNeuralNetwork parent1 = null;
+            DeepNeuralNetwork parent2 = null;
+            DeepNeuralNetwork child;
 
             if (i == 0)
             {
-                parent1 = mPopulation[mBest];
-                parent2 = mPopulation[mBest];
-                child = parent1.CrossOver(parent2);
+                parent1 = myPopulation[mBest].GetComponent<DeepNeuralNetwork>();
+                parent2 = myPopulation[mBest].GetComponent<DeepNeuralNetwork>();
                 //child.SetColor(Color.green);
             }
             else
             {
                 if (i < mPopulation.Count * 0.5)
                 {
-                    parent1 = mPopulation[mBest];
-                    parent2 = mPopulation[mSecondBest];
-                    child = parent1.CrossOver(parent2);
+                    parent1 = myPopulation[mBest].GetComponent<DeepNeuralNetwork>();
+                    parent2 = myPopulation[mSecondBest].GetComponent<DeepNeuralNetwork>();
                     //child.mGene.SetColor(Color.yellow);
                 }
                 else
                 {
-                    parent1 = mPopulation[mBest];
-                    parent2 = mPopulation[GetRandomParentIndex(mBest)];
-                    child = parent1.CrossOver(parent2);
+                    parent1 = myPopulation[mBest].GetComponent<DeepNeuralNetwork>();
+                    parent2 = myPopulation[GetRandomParentIndex(mBest)].GetComponent<DeepNeuralNetwork>();
                     //child.mGene.SetColor(Color.red);
                 }
             }
+            child = parent1.GeneticCrossover(ref parent2);
             nextGen.Add(child);
         }
 
@@ -104,9 +110,13 @@ public class GeneticTrainer : MonoBehaviour
         for(int i = 0; i < PopulationSize; ++i)
         {
             myPopulation.Add(Instantiate(GeneType, SpawnPoint.position, SpawnPoint.rotation));
+            myPopulation[i].SetActive(true);
             mPopulation.Add(myPopulation[i].GetComponent<DNA>());
-            mPopulation[i] = nextGen[i];
+            var dna = myPopulation[i].GetComponent<DeepNeuralNetwork>();
+            dna = nextGen[i];
         }
+
+        Generation++;
     }
 
 

@@ -8,9 +8,14 @@ public class DeepNeuralNetwork : MonoBehaviour
     [SerializeField] int mNumberOfOutputs = 3;
     [SerializeField] List<int> LayerNumNnurons = new List<int>();
     [HideInInspector] public List<NeuralLayer> mLayers = new List<NeuralLayer>();
+    [SerializeField] float mMutationRate = 0.03f;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
+    {
+        Initialize();
+    }
+    void Initialize()
     {
         for(int i = 0; i < LayerNumNnurons.Count; ++i)
         {
@@ -19,7 +24,7 @@ public class DeepNeuralNetwork : MonoBehaviour
             mLayers[i].SetOutputCount(LayerNumNnurons[i]);
             if (i == 0)
             {
-                mLayers[i].SetInputCount(0);
+                mLayers[i].SetInputCount(LayerNumNnurons[i]);
                 mLayers[i].SetOutputCount(LayerNumNnurons[0]);
             }
             else
@@ -30,6 +35,7 @@ public class DeepNeuralNetwork : MonoBehaviour
 
             mLayers[i].Initialize();
         }
+
     }
 
     public void Randomize()
@@ -67,4 +73,41 @@ public class DeepNeuralNetwork : MonoBehaviour
         }
     }
 
+    public DeepNeuralNetwork GeneticCrossover(ref DeepNeuralNetwork otherParent)
+    {
+        DeepNeuralNetwork child = new DeepNeuralNetwork();
+        child.LayerNumNnurons = LayerNumNnurons;
+        child.Initialize();
+
+        if (Random.Range(0.0f, 1.0f) > mMutationRate)
+        {
+            for (int layer = 0; layer < mLayers.Count; ++layer)
+            {
+                for (int output = 0; output < mLayers[layer].mOutputCount; ++output)
+                {
+                    for (int input = 0; input < mLayers[layer].GetInputCount(); ++input)
+                    {
+                        if (Random.Range(0.0f, 1.0f) < 0.5)
+                        {
+                            child.mLayers[layer].SetWeight(mLayers[layer].GetWeight(output, input), output, input);
+                        }
+                        else
+                        {
+                            child.mLayers[layer].SetWeight(otherParent.mLayers[layer].GetWeight(output, input), output, input);
+                        }
+                    }
+                }
+
+            }
+        }
+        else
+        {
+            if (UnityEngine.Random.Range(0.0f, 1.0f) < mMutationRate)
+            {
+                child.Randomize();
+            }
+        }
+
+        return child;
+    }
 }

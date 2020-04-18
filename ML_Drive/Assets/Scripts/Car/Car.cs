@@ -16,6 +16,7 @@ public class Car : MonoBehaviour
     [SerializeField] float TurnSpeed = 5.0f;
 
     DeepNeuralNetwork myNeuralNet = null;
+    DNA myDna = null;
     Rigidbody myRigidbody = null;
     CarSensor mySensor = null;
 
@@ -34,6 +35,7 @@ public class Car : MonoBehaviour
         myNeuralNet = GetComponent<DeepNeuralNetwork>();
         mySensor = GetComponent<CarSensor>();
         myRigidbody = GetComponent<Rigidbody>();
+        myDna = GetComponent<DNA>();
 
         for(int i = 0; i < 4; ++i)
         {
@@ -50,12 +52,15 @@ public class Car : MonoBehaviour
 
         output = myNeuralNet.FeedForward(ref inputForDNN);
 
-        move = output[0] > output[1] ? Action.Accelerate : Action.Decelerate;
-        moveVal = output[0] > output[1] ? output[0] : - output[1];
-        turn = output[2] > output[3] ? Action.TurnLeft : Action.TurnRight;
-        turnVal = output[2] > output[3] ? output[2] : -output[3];
+        if (myDna.IsAlive)
+        {
+            move = output[0] > output[1] ? Action.Accelerate : Action.Decelerate;
+            moveVal = output[0] > output[1] ? output[0] : -output[1];
+            turn = output[2] > output[3] ? Action.TurnLeft : Action.TurnRight;
+            turnVal = output[2] > output[3] ? output[2] : -output[3];
 
-        myRigidbody.AddForce(transform.forward * moveVal * MaxSpeed);
-        transform.Rotate(Vector3.up, TurnSpeed * turnVal);
+            myRigidbody.AddForce(transform.forward * moveVal * MaxSpeed + transform.forward * 5.0f);
+            transform.Rotate(Vector3.up, TurnSpeed * turnVal);
+        }
     }
 }

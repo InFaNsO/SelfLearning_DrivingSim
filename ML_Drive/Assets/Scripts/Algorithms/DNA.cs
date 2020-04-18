@@ -5,7 +5,7 @@ using UnityEngine;
 public class DNA : MonoBehaviour
 {
     public DeepNeuralNetwork myDeepNeuralNetwork = null;
-    public float mFitness { get; private set; }
+    public float mFitness;
 
     public bool IsAlive = true;
     
@@ -56,9 +56,22 @@ public class DNA : MonoBehaviour
         {
             IsAlive = false;
         }
-        if(other.tag == "Checkpoint")
+        if(other.tag == "Checkpoint" && IsAlive)
         {
+            mFitness += 10.0f;
+        }
+    }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Wall")
+        {
+            IsAlive = false;
+            return;
+        }
+        if (collision.gameObject.tag == "Checkpoint" && IsAlive)
+        {
+            mFitness += 10.0f;
         }
     }
 
