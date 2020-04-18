@@ -7,7 +7,7 @@ public class DNA : MonoBehaviour
     public DeepNeuralNetwork myDeepNeuralNetwork = null;
     public float mFitness { get; private set; }
 
-    public bool IsAlive = false;
+    public bool IsAlive = true;
     
     [SerializeField] float mMutationRate = 0.4f;
 
@@ -48,6 +48,18 @@ public class DNA : MonoBehaviour
         }
 
         return child;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Wall")
+        {
+            IsAlive = false;
+        }
+        if(other.tag == "Checkpoint")
+        {
+
+        }
     }
 
     public void Mutate()

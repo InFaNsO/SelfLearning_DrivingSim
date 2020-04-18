@@ -13,7 +13,7 @@ namespace PathFinding
         Left
     }
 
-    public class Tracker : MonoBehaviour {
+    public class TrackerDepricated : MonoBehaviour {
 
        // public Car car;
         public Vector3 hitForwardDirection;

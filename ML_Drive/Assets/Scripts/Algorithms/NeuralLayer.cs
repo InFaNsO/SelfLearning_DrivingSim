@@ -20,15 +20,20 @@ public class NeuralLayer : MonoBehaviour
     public List<float> mError = new List<float>();
 
     public void SetInputCount(int count) { mInputCount = count; }
+    public void SetOutputCount(int count) { mOutputCount = count; }
     public int GetInputCount() { return mInputCount; }
 
     public void Initialize()
     {
-        mOutputs.Capacity = mOutputCount;
-        mInputs.Capacity = mInputCount;
-
-        mGamma.Capacity = mOutputCount;
-        mError.Capacity = mOutputCount;
+        for(int i = 0; i < mOutputCount; ++i)
+        {
+            mOutputs.Add(0);
+            mGamma.Add(0);
+            mError.Add(0);
+        }
+    
+        for(int i = 0; i < mInputCount; ++i)
+            mInputs.Add(0);
 
         InitializeWeights();
     }
@@ -43,10 +48,10 @@ public class NeuralLayer : MonoBehaviour
 
         for (int i = 0; i < mOutputCount; ++i)
         {
-            mWeights[i] = new List<float>();
+            mWeights.Add(new List<float>());
             mWeights[i].Capacity = mInputCount;
 
-            mWeightsDelta[i] = new List<float>();
+            mWeightsDelta.Add(new List<float>());
             mWeightsDelta[i].Capacity = mInputCount;
 
             for (int j = 0; j < mInputCount; ++j)
@@ -56,7 +61,7 @@ public class NeuralLayer : MonoBehaviour
                 {
                     rand *= -1;
                 }
-                mWeights[i][j] = rand;
+                mWeights[i].Add( rand);
             }
         }
     }

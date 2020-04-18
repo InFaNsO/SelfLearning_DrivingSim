@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class GeneticTrainer : MonoBehaviour
 {
+
     public Transform SpawnPoint;
+    [SerializeField] int PopulationSize = 10;
+    [SerializeField] GameObject GeneType = null;
 
     public int Generation = 0;
     public float mutationRate = 0.3f;
@@ -13,19 +16,19 @@ public class GeneticTrainer : MonoBehaviour
     float FitnessSum = 0;
 
     List<DNA> mPopulation = new List<DNA>();
-    List<Score> mPopulationScores = new List<Score>();
+    List<GameObject> myPopulation = null;
 
     int mBest = -1;
     int mSecondBest = -1;
 
+
     void Start()
     {
-        var dnas = FindObjectsOfType<DNA>();
-
-        for(int i = 0; i < dnas.Length; ++i)
+        myPopulation = new List<GameObject>();
+        for (int i = 0; i < PopulationSize; ++i)
         {
-            mPopulation.Add(dnas[i]);
-            mPopulationScores.Add(dnas[i].GetComponent<Score>());
+            myPopulation.Add(Instantiate(GeneType, SpawnPoint.position, SpawnPoint.rotation));
+            mPopulation.Add(myPopulation[i].GetComponent<DNA>());
         }
 
         mBest = 0;
@@ -35,9 +38,9 @@ public class GeneticTrainer : MonoBehaviour
 
     void Update()
     {
-        for(int i = 0; i < mPopulationScores.Count; ++i)
+        for(int i = 0; i < mPopulation.Count; ++i)
         {
-            if(mPopulationScores[i].mScore > mPopulationScores[mBest].mScore)
+            if(mPopulation[i].mFitness > mPopulation[mBest].mFitness)
             {
                 mSecondBest = mBest;
                 mBest = i;
@@ -91,16 +94,21 @@ public class GeneticTrainer : MonoBehaviour
             nextGen.Add(child);
         }
 
-        for(int i = 0; i < nextGen.Count; ++i)
+        for(int i = 0; i < PopulationSize; ++i)
         {
+            Destroy(myPopulation[i]);
+        }
+        myPopulation.Clear();
+        mPopulation.Clear();
+
+        for(int i = 0; i < PopulationSize; ++i)
+        {
+            myPopulation.Add(Instantiate(GeneType, SpawnPoint.position, SpawnPoint.rotation));
+            mPopulation.Add(myPopulation[i].GetComponent<DNA>());
             mPopulation[i] = nextGen[i];
         }
     }
 
-    void ResetAllToSpawn()
-    {
-
-    }
 
     int GetRandomParentIndex(int otherInd)
     {

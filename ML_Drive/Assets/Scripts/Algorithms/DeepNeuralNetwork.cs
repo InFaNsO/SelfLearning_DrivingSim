@@ -6,25 +6,26 @@ public class DeepNeuralNetwork : MonoBehaviour
 {
     [SerializeField] int mNumberOfInputs = 4;
     [SerializeField] int mNumberOfOutputs = 3;
-    [SerializeField] public List<NeuralLayer> mLayers = new List<NeuralLayer>();
+    [SerializeField] List<int> LayerNumNnurons = new List<int>();
+    [HideInInspector] public List<NeuralLayer> mLayers = new List<NeuralLayer>();
 
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = 0; i < mLayers.Count; ++i)
+        for(int i = 0; i < LayerNumNnurons.Count; ++i)
         {
+            mLayers.Add(new NeuralLayer());
+
+            mLayers[i].SetOutputCount(LayerNumNnurons[i]);
             if (i == 0)
             {
-                mLayers[i].SetInputCount(mNumberOfInputs);
-                mLayers[i].Initialize();
-                continue;
+                mLayers[i].SetInputCount(0);
+                mLayers[i].SetOutputCount(LayerNumNnurons[0]);
             }
-
-            mLayers[i].SetInputCount(mLayers[i - 1].mOutputCount);
-
-            if (i +1 == mLayers.Count)
+            else
             {
-                mLayers[i].mOutputCount = mNumberOfOutputs;
+                mLayers[i].SetInputCount(LayerNumNnurons[i-1]);
+                mLayers[i].SetOutputCount(LayerNumNnurons[i]);
             }
 
             mLayers[i].Initialize();
@@ -43,7 +44,7 @@ public class DeepNeuralNetwork : MonoBehaviour
     {
         mLayers[0].FeedForward(ref inputs);
 
-        for (int i = 1; i < mLayers.Count - 1; ++i)
+        for (int i = 1; i < mLayers.Count; ++i)
         {
             mLayers[i].FeedForward(ref mLayers[i - 1].mOutputs);
         }
