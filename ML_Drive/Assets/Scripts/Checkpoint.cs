@@ -8,7 +8,7 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var score = other.GetComponent<Score>();
+        var score = other.GetComponent<DNA>();
         if (score == null)
             return;
 

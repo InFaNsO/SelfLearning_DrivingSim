@@ -10,6 +10,7 @@ public class DNA : MonoBehaviour
     public bool IsAlive = true;
     
     [SerializeField] float mMutationRate = 0.4f;
+    [SerializeField] float CheckpointScore = 10.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -52,11 +53,7 @@ public class DNA : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Wall")
-        {
-            IsAlive = false;
-        }
-        if(other.tag == "Checkpoint" && IsAlive)
+        if(other.tag == "CheckPoint" && IsAlive)
         {
             mFitness += 10.0f;
         }
@@ -69,10 +66,11 @@ public class DNA : MonoBehaviour
             IsAlive = false;
             return;
         }
-        if (collision.gameObject.tag == "Checkpoint" && IsAlive)
-        {
-            mFitness += 10.0f;
-        }
+    }
+
+    public void AddScore(float points)
+    {
+        mFitness += points;
     }
 
     public void Mutate()

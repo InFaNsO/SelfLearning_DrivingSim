@@ -61,6 +61,14 @@ public class Car : MonoBehaviour
 
             myRigidbody.AddForce(transform.forward * moveVal * MaxSpeed + transform.forward * 5.0f);
             transform.Rotate(Vector3.up, TurnSpeed * turnVal);
+
+            Vector3 vel = new Vector3();
+
+            vel.x = myRigidbody.velocity.x > MaxSpeed ? MaxSpeed : myRigidbody.velocity.x;
+            vel.y = myRigidbody.velocity.y != 0.0f ? 0.0f: 0.0f;
+            vel.z = myRigidbody.velocity.z > MaxSpeed ? MaxSpeed : myRigidbody.velocity.z;
+
+            myRigidbody.velocity = vel;
         }
     }
 }

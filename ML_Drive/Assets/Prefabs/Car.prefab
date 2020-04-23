@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7797388931367384556}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 4587319394260802361}
   - component: {fileID: 3379486335016121830}
   - component: {fileID: 7873677957387065312}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Wheel_FR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3df0917cd0e2e2d41af141d6db6119a9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 8813941391698921317}
   - component: {fileID: 4994648783797026429}
   - component: {fileID: 6478847060014965220}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Wheel_FL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3df0917cd0e2e2d41af141d6db6119a9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 5304294156137754728}
   - component: {fileID: 3781708400602521148}
   - component: {fileID: 3075195765765716300}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Wheel_BL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +280,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3df0917cd0e2e2d41af141d6db6119a9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -326,7 +326,7 @@ GameObject:
   - component: {fileID: 7002253146149978870}
   - component: {fileID: 7178566054267438255}
   - component: {fileID: 7272448346212361572}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -373,7 +373,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 779df39dc53eef24ca706dba3976dfce, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -423,7 +423,7 @@ GameObject:
   - component: {fileID: 3909623439783914038}
   - component: {fileID: 3146866503608388925}
   - component: {fileID: 5682697766305333323}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Car
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -466,7 +466,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  mMutationRate: 0.03
+  mMutationRate: 0.3
 --- !u!65 &1316523704448598368
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -544,6 +544,7 @@ MonoBehaviour:
   mFitness: 0
   IsAlive: 1
   mMutationRate: 0.4
+  CheckpointScore: 10
 --- !u!1 &8055699479301096389
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,7 +557,7 @@ GameObject:
   - component: {fileID: 3060465783082671947}
   - component: {fileID: 1678677513443510949}
   - component: {fileID: 2054453203356151185}
-  m_Layer: 2
+  m_Layer: 8
   m_Name: Wheel_BR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -603,7 +604,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3df0917cd0e2e2d41af141d6db6119a9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class DeepNeuralNetwork : MonoBehaviour
 {
-    [SerializeField] int mNumberOfInputs = 4;
-    [SerializeField] int mNumberOfOutputs = 3;
+    int mNumberOfInputs = 4;
+    int mNumberOfOutputs = 3;
+
+    [SerializeField] UIDNN NNConfig;
+    
     [SerializeField] List<int> LayerNumNnurons = new List<int>();
     [HideInInspector] public List<NeuralLayer> mLayers = new List<NeuralLayer>();
     [SerializeField] float mMutationRate = 0.03f;
@@ -13,10 +16,11 @@ public class DeepNeuralNetwork : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        Initialize();
+        //Initialize();
     }
-    void Initialize()
+    public void Initialize()
     {
+        mLayers.Clear();
         for(int i = 0; i < LayerNumNnurons.Count; ++i)
         {
             mLayers.Add(new NeuralLayer());
@@ -109,5 +113,15 @@ public class DeepNeuralNetwork : MonoBehaviour
         }
 
         return child;
+    }
+
+    public void OnSetButton()
+    {
+        LayerNumNnurons.Clear(); 
+
+        for(int i = 0; i < NNConfig.myLayers.Count; ++i)
+        {
+            LayerNumNnurons.Add(NNConfig.myLayers[i].GetComponent<UIDNNLayer>().myNeurons.Count);
+        }
     }
 }

@@ -13,11 +13,13 @@ public class CarSensor : MonoBehaviour
     private RaycastHit hitRight;
 
     //[SerializeField] LayerMask layermask;
-    [SerializeField]LayerMask layermask = 0;
+    [SerializeField] public LayerMask layermask = 0;
+    int mask = 0;
     public void Start()
     {
         //layermask = 1 << 10;
-        layermask = ~layermask;
+        //layermask = ~layermask;
+        mask = layermask.value;
     }
 
     public void Update()
@@ -25,13 +27,16 @@ public class CarSensor : MonoBehaviour
         bool hit = true;
 
         //front
-        hit = Physics.Raycast(transform.position, transform.forward, out hitFront);
+        hit = Physics.Raycast(transform.position, transform.forward, out hitFront, Mathf.Infinity, mask, QueryTriggerInteraction.Ignore);
         distanceFront = hitFront.distance;
+        if (hit)
+            Debug.Log("Had collision in front");
+        
         //Left
-        hit = Physics.Raycast(transform.position, -transform.right, out hitLeft);
+        hit = Physics.Raycast(transform.position, -transform.right, out hitLeft, Mathf.Infinity, mask, QueryTriggerInteraction.Ignore);
         distanceLeft = hitLeft.distance;
         //Left
-        hit = Physics.Raycast(transform.position, transform.right, out hitRight);
+        hit = Physics.Raycast(transform.position, transform.right, out hitRight, Mathf.Infinity, mask, QueryTriggerInteraction.Ignore);
         distanceRight = hitRight.distance;
     }
 
