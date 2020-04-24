@@ -2,11 +2,25 @@
 
 A Neural Network test to teach a car how to drive on a track. The Network uses genetic algorithm which is not the most time effecient way of training a neural network, but it is fun to see the progress. there is support for back propogation in this system but is not being used at the moment due to lack of training data
 
-## Scene
-![Simulation running](images/main_old.jpg)
+## User Interface
+### Main Menue
+![Simulation Main Menue](images/MainMenue.PNG)
+* Let's user acesses the settengs 
+* Let's user start the simulations
+
+### Settings Menue
+![Simulation Settings Menue](images/SettingsMenue.PNG)
+* Let's user set the number of instances in each generation
+* Let's user set the number of hidden layers in the neural network
+* Lets the user set the individual layers in the Neural network
+
+### Simulation UI
+![Simulation Screen](images/SimScreen.PNG)
+* Let's user move to next generation
+* Let's user save the best performing neural network
 
 ## Car
-![CarInput Image](images/input_old.jpg)
+![CarInput Image](images/CarInput.PNG)
 
 ### Inputs
 The car is provided with 4 basic inputs
@@ -23,16 +37,6 @@ The input data is send to a neural network which then decides on either of outpu
 * Speed
   * Accelerate
   * Decelerate
-
-## Controlling The System
-Use the game objects in scene to finely tune the system accrding to needs. 
-
-## The System
-when running press K to reset the cars, all cars are color coded
-* Green - The best one from previous generation
-* Yellow - Made by merging the best network and a random network
-* Red - Made by merging 2 random networks
-
 
 ## Built with
 
