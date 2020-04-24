@@ -20,6 +20,8 @@ public class Car : MonoBehaviour
     Rigidbody myRigidbody = null;
     CarSensor mySensor = null;
 
+    Vector3 vel = new Vector3();
+
     float speed = 10.0f;
 
     List<float> inputForDNN = new List<float>();
@@ -55,20 +57,43 @@ public class Car : MonoBehaviour
         if (myDna.IsAlive)
         {
             move = output[0] > output[1] ? Action.Accelerate : Action.Decelerate;
-            moveVal = output[0] > output[1] ? output[0] : -output[1];
+            moveVal = output[0] > output[1] ? output[0] : -output[1] * 0.5f;
             turn = output[2] > output[3] ? Action.TurnLeft : Action.TurnRight;
             turnVal = output[2] > output[3] ? output[2] : -output[3];
 
-            myRigidbody.AddForce(transform.forward * moveVal * MaxSpeed + transform.forward * 5.0f);
+            if(mySensor.distanceFront > 15.0f)
+            {
+                if (move == Action.Accelerate)
+                    myDna.mFitness += 10f;
+            }
+            else if(mySensor.distanceLeft > mySensor.distanceRight)
+            {
+                if (turn == Action.TurnLeft)
+                    myDna.mFitness += 10.0f;
+                else
+                    myDna.mFitness -= 15.0f;
+            }
+            else if(mySensor.distanceLeft < mySensor.distanceRight)
+            {
+                if (turn == Action.TurnRight)
+                    myDna.mFitness += 10.0f;
+                else
+                    myDna.mFitness -= 15.0f;
+            }
+            //myRigidbody.AddForce(transform.forward * moveVal * MaxSpeed + transform.forward * 10.0f);
             transform.Rotate(Vector3.up, TurnSpeed * turnVal);
 
-            Vector3 vel = new Vector3();
+            vel = transform.forward * moveVal * MaxSpeed + transform.forward * 10.0f;
 
-            vel.x = myRigidbody.velocity.x > MaxSpeed ? MaxSpeed : myRigidbody.velocity.x;
-            vel.y = myRigidbody.velocity.y != 0.0f ? 0.0f: 0.0f;
-            vel.z = myRigidbody.velocity.z > MaxSpeed ? MaxSpeed : myRigidbody.velocity.z;
-
+            //vel.x = myRigidbody.velocity.x > MaxSpeed ? MaxSpeed : myRigidbody.velocity.x;
+            //vel.y = myRigidbody.velocity.y != 0.0f ? 0.0f: 0.0f;
+            //vel.z = myRigidbody.velocity.z > MaxSpeed ? MaxSpeed : myRigidbody.velocity.z;
+            if (vel.sqrMagnitude < 15.0f)
+                vel = vel.normalized * 15.0f;
+            //myRigidbody.velocity = vel;
+            //transform.position = transform.position + vel * Time.deltaTime;
             myRigidbody.velocity = vel;
+            myRigidbody.angularVelocity = new Vector3(0.0f, myRigidbody.angularVelocity.y, 0.0f);
         }
     }
 }

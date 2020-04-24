@@ -29,6 +29,9 @@ public class GeneticTrainer : MonoBehaviour
 
     public bool IncrementGenerationTrig = false;
 
+    float MaxGenTime = 45.0f;
+    float nextGenTime = 0;
+
     void Start()
     {
         if(myPopulation != null)
@@ -47,6 +50,7 @@ public class GeneticTrainer : MonoBehaviour
 
         mBest = 0;
         mSecondBest = 0;
+        nextGenTime = Time.time + MaxGenTime;
     }
 
     private void OnEnable()
@@ -60,16 +64,29 @@ public class GeneticTrainer : MonoBehaviour
         if(IncrementGenerationTrig)
         {
             IncrementGeneration();
+            nextGenTime = Time.time + MaxGenTime;
             IncrementGenerationTrig = false;
         }
 
         for(int i = 0; i < mPopulation.Count; i++)
         {
-            if(mPopulation[i].mFitness > mPopulation[mBest].mFitness)
+            if(!mPopulation[i].IsAlive)
+            {
+                myPopulation[i].SetActive(false);
+            }
+
+            if (mPopulation[i].mFitness > mPopulation[mBest].mFitness)
             {
                 mSecondBest = mBest;
                 mBest = i;
             }
+        }
+
+        if(nextGenTime < Time.time)
+        {
+            IncrementGeneration();
+            nextGenTime = Time.time + MaxGenTime;
+            return;
         }
 
         //Check if all are dead
@@ -80,6 +97,8 @@ public class GeneticTrainer : MonoBehaviour
         }
 
         IncrementGeneration();
+        nextGenTime = Time.time + MaxGenTime;
+
     }
 
     public void UIIncrement()
@@ -88,56 +107,81 @@ public class GeneticTrainer : MonoBehaviour
             IncrementGeneration();
         else
             Debug.Log("Data Wrong");
+        nextGenTime = Time.time + MaxGenTime;
+
     }
 
     void IncrementGeneration()
     {
-        List<DeepNeuralNetwork> nextGen = new List<DeepNeuralNetwork>();
+        List<GameObject> nextGen = new List<GameObject>();
 
-        for (int i = 0; i < mPopulation.Count; ++i)
+        for (int i = 0; i < PopulationSize + 1; ++i)
         {
-            DeepNeuralNetwork parent1 = null;
-            DeepNeuralNetwork parent2 = null;
-            DeepNeuralNetwork child;
-
+            GameObject parent1 = null;
+            GameObject parent2 = null;
+            GameObject child = null;
+            string name = "No Parent";
             if (i == 0)
             {
-                parent1 = myPopulation[mBest].GetComponent<DeepNeuralNetwork>();
-                parent2 = myPopulation[mBest].GetComponent<DeepNeuralNetwork>();
+                child = myPopulation[mBest];
+                child.name = "BestCar";
+                parent1 = myPopulation[mBest];
+                parent2 = myPopulation[mBest];
                 //child.SetColor(Color.green);
+            }
+            else if(i == 1)
+            {
+                child = Instantiate(myPopulation[mBest]);
+                child.name = "BustRunning";
             }
             else
             {
                 if (i < mPopulation.Count * 0.5)
                 {
-                    parent1 = myPopulation[mBest].GetComponent<DeepNeuralNetwork>();
-                    parent2 = myPopulation[mSecondBest].GetComponent<DeepNeuralNetwork>();
+                    parent1 = myPopulation[mBest];
+                    parent2 = myPopulation[mSecondBest];
+                    name = "Secondbest " + i.ToString();
                     //child.mGene.SetColor(Color.yellow);
                 }
                 else
                 {
-                    parent1 = myPopulation[mBest].GetComponent<DeepNeuralNetwork>();
-                    parent2 = myPopulation[GetRandomParentIndex(mBest)].GetComponent<DeepNeuralNetwork>();
+                    parent1 = myPopulation[mBest];
+                    parent2 = myPopulation[GetRandomParentIndex(mBest)];
+                    name = "Random " + i.ToString();
                     //child.mGene.SetColor(Color.red);
                 }
             }
-            child = parent1.GeneticCrossover(ref parent2);
+            if (i > 1)
+            {
+                parent1.GetComponent<DeepNeuralNetwork>().GeneticCrossover(ref parent2, out child);
+                child.name = name;
+                
+            }
             nextGen.Add(child);
         }
 
-        for(int i = 0; i < PopulationSize; ++i)
+        float bestScore = mPopulation[mBest].mFitness;
+
+        mPopulation.Clear();
+        for (int i = 0; i < myPopulation.Count; ++i)
         {
-            Destroy(myPopulation[i]);
+            if(i != mBest)
+                Destroy(myPopulation[i]);
         }
         myPopulation.Clear();
-        mPopulation.Clear();
 
-        for(int i = 0; i < PopulationSize; ++i)
+        for(int i = 0; i < nextGen.Count; ++i)
         {
-            myPopulation.Add(Instantiate(GeneType, SpawnPoint.position, SpawnPoint.rotation));
-            SetCar(i);
-            var dna = myPopulation[i].GetComponent<DeepNeuralNetwork>();
-            dna = nextGen[i];
+            myPopulation.Add(nextGen[i]);
+            SetCar(i, false);
+            mPopulation[i].MyReset();
+            if (i == 0)
+            {
+                mPopulation[i].mFitness = bestScore;
+                mPopulation[i].IsAlive = false;
+            }
+            myPopulation[i].transform.position = SpawnPoint.position;
+            myPopulation[i].transform.rotation = SpawnPoint.rotation;
         }
 
         mBest = 0;
@@ -146,13 +190,14 @@ public class GeneticTrainer : MonoBehaviour
         Generation++;
     }
 
-    void SetCar(int index)
+    void SetCar(int index, bool setDNN = true)
     {
         myPopulation[index].GetComponent<Car>().enabled = true;
         myPopulation[index].GetComponent<CarSensor>().enabled = true;
         myPopulation[index].GetComponent<DNA>().enabled = true;
         mPopulation.Add(myPopulation[index].GetComponent<DNA>());
-        myPopulation[index].GetComponent<DeepNeuralNetwork>().Initialize();
+        if(setDNN)
+            myPopulation[index].GetComponent<DeepNeuralNetwork>().Initialize();
         myPopulation[index].SetActive(true);
     }
 

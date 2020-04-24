@@ -10,13 +10,13 @@ public class DeepNeuralNetwork : MonoBehaviour
     [SerializeField] UIDNN NNConfig;
     
     [SerializeField] List<int> LayerNumNnurons = new List<int>();
-    [HideInInspector] public List<NeuralLayer> mLayers = new List<NeuralLayer>();
+    public List<NeuralLayer> mLayers = new List<NeuralLayer>();
     [SerializeField] float mMutationRate = 0.03f;
 
     // Start is called before the first frame update
     private void Start()
     {
-        //Initialize();
+        Initialize();
     }
     public void Initialize()
     {
@@ -40,6 +40,14 @@ public class DeepNeuralNetwork : MonoBehaviour
             mLayers[i].Initialize();
         }
 
+    }
+
+    public void Copy(DeepNeuralNetwork other)
+    {
+        for (int i = 0; i < mLayers.Count; ++i)
+        {
+            mLayers[i].Copy(other.mLayers[i]);
+        }
     }
 
     public void Randomize()
@@ -77,27 +85,30 @@ public class DeepNeuralNetwork : MonoBehaviour
         }
     }
 
-    public DeepNeuralNetwork GeneticCrossover(ref DeepNeuralNetwork otherParent)
+    public void GeneticCrossover(ref GameObject otherParent, out GameObject childGO)
     {
-        DeepNeuralNetwork child = new DeepNeuralNetwork();
+        childGO = Instantiate(otherParent);
+        var child = childGO.GetComponent<DeepNeuralNetwork>();
         child.LayerNumNnurons = LayerNumNnurons;
         child.Initialize();
 
-        if (Random.Range(0.0f, 1.0f) > mMutationRate)
+        if (Random.Range(0.0f, 1.0f) > mMutationRate || this == otherParent)
         {
-            for (int layer = 0; layer < mLayers.Count; ++layer)
+            var otherDNN = otherParent.GetComponent<DeepNeuralNetwork>();
+
+            for (int layerIndex = 0; layerIndex < mLayers.Count; ++layerIndex)
             {
-                for (int output = 0; output < mLayers[layer].mOutputCount; ++output)
+                for (int i = 0; i < mLayers[layerIndex].mWeights.Count; ++i)
                 {
-                    for (int input = 0; input < mLayers[layer].GetInputCount(); ++input)
+                    for (int j = 0; j < mLayers[layerIndex].mWeights[i].Count; ++j)
                     {
                         if (Random.Range(0.0f, 1.0f) < 0.5)
                         {
-                            child.mLayers[layer].SetWeight(mLayers[layer].GetWeight(output, input), output, input);
+                            child.mLayers[layerIndex].mWeights[i][j] = mLayers[layerIndex].mWeights[i][j];
                         }
                         else
                         {
-                            child.mLayers[layer].SetWeight(otherParent.mLayers[layer].GetWeight(output, input), output, input);
+                            child.mLayers[layerIndex].mWeights[i][j] = otherDNN.mLayers[layerIndex].mWeights[i][j];
                         }
                     }
                 }
@@ -106,13 +117,8 @@ public class DeepNeuralNetwork : MonoBehaviour
         }
         else
         {
-            if (UnityEngine.Random.Range(0.0f, 1.0f) < mMutationRate)
-            {
-                child.Randomize();
-            }
+            child.Randomize();
         }
-
-        return child;
     }
 
     public void OnSetButton()
@@ -123,5 +129,7 @@ public class DeepNeuralNetwork : MonoBehaviour
         {
             LayerNumNnurons.Add(NNConfig.myLayers[i].GetComponent<UIDNNLayer>().myNeurons.Count);
         }
+
+        Initialize();
     }
 }

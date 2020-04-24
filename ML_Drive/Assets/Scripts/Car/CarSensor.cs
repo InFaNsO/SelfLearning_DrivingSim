@@ -29,9 +29,7 @@ public class CarSensor : MonoBehaviour
         //front
         hit = Physics.Raycast(transform.position, transform.forward, out hitFront, Mathf.Infinity, mask, QueryTriggerInteraction.Ignore);
         distanceFront = hitFront.distance;
-        if (hit)
-            Debug.Log("Had collision in front");
-        
+         
         //Left
         hit = Physics.Raycast(transform.position, -transform.right, out hitLeft, Mathf.Infinity, mask, QueryTriggerInteraction.Ignore);
         distanceLeft = hitLeft.distance;

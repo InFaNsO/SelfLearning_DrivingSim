@@ -46,7 +46,6 @@ GameObject:
   - component: {fileID: 6496547195667741957}
   - component: {fileID: 4587319394260802361}
   - component: {fileID: 3379486335016121830}
-  - component: {fileID: 7873677957387065312}
   m_Layer: 8
   m_Name: Wheel_FR
   m_TagString: Untagged
@@ -115,19 +114,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &7873677957387065312
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 523565361002370653}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1283450813409876755
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +125,6 @@ GameObject:
   - component: {fileID: 3505426737564443543}
   - component: {fileID: 8813941391698921317}
   - component: {fileID: 4994648783797026429}
-  - component: {fileID: 6478847060014965220}
   m_Layer: 8
   m_Name: Wheel_FL
   m_TagString: Untagged
@@ -208,19 +193,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &6478847060014965220
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1283450813409876755}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2689602419276882671
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,7 +204,6 @@ GameObject:
   - component: {fileID: 2540866956704654566}
   - component: {fileID: 5304294156137754728}
   - component: {fileID: 3781708400602521148}
-  - component: {fileID: 3075195765765716300}
   m_Layer: 8
   m_Name: Wheel_BL
   m_TagString: Untagged
@@ -301,19 +272,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &3075195765765716300
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2689602419276882671}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3480216951503370248
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,7 +283,6 @@ GameObject:
   - component: {fileID: 7089025348155202533}
   - component: {fileID: 7002253146149978870}
   - component: {fileID: 7178566054267438255}
-  - component: {fileID: 7272448346212361572}
   m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
@@ -394,20 +351,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &7272448346212361572
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3480216951503370248}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &6867169448050609955
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,15 +400,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2273cead6906e844abfb90bed764c26c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mNumberOfInputs: 4
-  mNumberOfOutputs: 4
+  NNConfig: {fileID: 0}
   LayerNumNnurons: 04000000050000000a0000000f00000014000000190000001e00000023000000280000002d000000320000003c0000004600000050000000280000003c00000050000000140000000a00000004000000
   mLayers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - mOutputCount: 0
+    mLearningRate: 0.0033
+    mOutputs: []
+    mInputs: []
+    mGamma: []
+    mError: []
+  - mOutputCount: 0
+    mLearningRate: 0.0033
+    mOutputs: []
+    mInputs: []
+    mGamma: []
+    mError: []
+  - mOutputCount: 0
+    mLearningRate: 0.0033
+    mOutputs: []
+    mInputs: []
+    mGamma: []
+    mError: []
+  - mOutputCount: 0
+    mLearningRate: 0.0033
+    mOutputs: []
+    mInputs: []
+    mGamma: []
+    mError: []
+  - mOutputCount: 0
+    mLearningRate: 0.0033
+    mOutputs: []
+    mInputs: []
+    mGamma: []
+    mError: []
   mMutationRate: 0.3
 --- !u!65 &1316523704448598368
 BoxCollider:
@@ -556,7 +523,6 @@ GameObject:
   - component: {fileID: 1852428496232506820}
   - component: {fileID: 3060465783082671947}
   - component: {fileID: 1678677513443510949}
-  - component: {fileID: 2054453203356151185}
   m_Layer: 8
   m_Name: Wheel_BR
   m_TagString: Untagged
@@ -625,16 +591,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &2054453203356151185
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8055699479301096389}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}

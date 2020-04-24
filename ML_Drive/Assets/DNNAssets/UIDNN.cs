@@ -45,7 +45,7 @@ public class UIDNN : MonoBehaviour
     {
         if (myLayers.Count < 3)
         {
-            AddLayers(3);
+            AddLayers(15);
             PositionLayers();
             MakeConnections();
             DisableLayer1nlast();
@@ -104,7 +104,13 @@ public class UIDNN : MonoBehaviour
                 UIDNNLayer dnnL = myLayers[i].GetComponent<UIDNNLayer>();
                 dnnL.myNetwork = this;
                 dnnL.myArea.sizeDelta = new Vector2(182, myUIArea.rect.height);
-                dnnL.SetNumberOfNeurons(4);
+                if(i == 0)
+                    dnnL.SetNumberOfNeurons(4);
+                else if (i == numLayersToAdd -1)
+                    dnnL.SetNumberOfNeurons(4);
+                else
+                    dnnL.SetNumberOfNeurons(15);
+
             }
             return;
         }

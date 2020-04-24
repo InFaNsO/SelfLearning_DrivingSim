@@ -10,7 +10,7 @@ public class DNA : MonoBehaviour
     public bool IsAlive = true;
     
     [SerializeField] float mMutationRate = 0.4f;
-    [SerializeField] float CheckpointScore = 10.0f;
+    [SerializeField] float CheckpointScore = 3.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -55,7 +55,7 @@ public class DNA : MonoBehaviour
     {
         if(other.tag == "CheckPoint" && IsAlive)
         {
-            mFitness += 10.0f;
+            mFitness += CheckpointScore;
         }
     }
 
@@ -64,6 +64,7 @@ public class DNA : MonoBehaviour
         if (collision.gameObject.tag == "Wall")
         {
             IsAlive = false;
+            
             return;
         }
     }
@@ -80,4 +81,11 @@ public class DNA : MonoBehaviour
             myDeepNeuralNetwork.Randomize();
         }
     }
+    public void MyReset()
+    {
+        IsAlive = true;
+        mFitness = 0.0f;
+    }
+
+        
 }

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class NeuralLayer : MonoBehaviour
+[System.Serializable]
+public class NeuralLayer
 {
 
     [SerializeField] public int mOutputCount = 0;       //# of neurons in the current layer
@@ -27,6 +28,16 @@ public class NeuralLayer : MonoBehaviour
         Initialize();
     }
 
+    public void Copy(NeuralLayer other)
+    {
+        for(int i = 0; i < mWeights.Count; ++i)
+        {
+            for(int j = 0; j < mWeights[i].Count; ++j)
+            {
+                mWeights[i][j] = other.mWeights[i][j];
+            }
+        }
+    }
 
     public void Initialize()
     {
